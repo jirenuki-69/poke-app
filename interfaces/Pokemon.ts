@@ -1,8 +1,8 @@
 interface Pokemon {
   id: number,
   name: string,
-  moves: Move[],
+  moves: Info[],
   sprites: Sprites,
-  types: Type[],
+  types: TypeInfo[],
   description: string
 }
