@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StatusBar as ExpoStatusBar } from 'expo-status-bar';
 import { Platform, StyleSheet, View, StatusBar, ScrollView, ToastAndroid, Text } from 'react-native';
 import { TextInput, ActivityIndicator } from '@react-native-material/core';
-import { getPokemonDescription, requestAPI } from './utils/request';
+import { getPokemonDescription, getPokemonInfo, requestAPI } from './utils/request';
 import PokemonImage from './components/PokemonImage';
 import PokemonTitleSubtitle from './components/PokemonTitleSubtitle';
 import axios from 'axios';
@@ -19,7 +19,7 @@ export default function App() {
     try {
       const { data }: { data: Pokemon } = await requestAPI.get(`pokemon/${value}`);
 
-      const description = await getPokemonDescription(data.id);
+      const { description } = await getPokemonInfo(data.id);
 
       getTypesMatchUps(data.types);
 
