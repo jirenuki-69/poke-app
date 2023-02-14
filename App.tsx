@@ -39,7 +39,7 @@ export default function App() {
     // }, 2000);
   };
 
-  const getTypesMatchUps = async (types: TypeInfo[]) => {
+  const getTypesMatchUps = async (types: PKType[]) => {
     const urls = types.map(({ type: { url } }) => url);
     const response: any = await Promise.all(urls.map(async (url) => await axios.get(url)));
   };

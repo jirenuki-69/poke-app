@@ -14,3 +14,8 @@ interface PKType {
   type: PKTypeInternal
 };
 
+interface EvolutionTree {
+  name: string,
+  types: string
+};
+
