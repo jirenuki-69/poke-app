@@ -23,7 +23,6 @@ export default function App() {
 
       setLoading(false);
       setPokemon(pokemonInfo);
-      console.log(JSON.stringify(pokemonInfo, null, 2))
     } catch (error) {
       setLoading(false);
       setNotFound('Pokemon no encontrado');
