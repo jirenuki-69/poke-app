@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StatusBar as ExpoStatusBar } from 'expo-status-bar';
 import { Platform, StyleSheet, View, StatusBar, ScrollView, ToastAndroid, Text } from 'react-native';
 import { TextInput, ActivityIndicator } from '@react-native-material/core';
-import { getPokemonDescription, getPokemonInfo, requestAPI } from './utils/request';
+import { getPokemonInfo, requestAPI } from './utils/request';
 import PokemonImage from './components/PokemonImage';
 import PokemonTitleSubtitle from './components/PokemonTitleSubtitle';
 import axios from 'axios';
@@ -11,6 +11,7 @@ export default function App() {
   const [value, setValue] = useState('');
   const [pokemon, setPokemon] = useState<Pokemon | null>();
   const [loading, setLoading] = useState(false);
+  const [pokeNotFound, setNotFound] = useState('');
 
   const onSubmit = async () => {
     setPokemon(null);
@@ -26,7 +27,8 @@ export default function App() {
       setLoading(false);
       setPokemon({ ...data, description });
     } catch (error) {
-      ToastAndroid.show('Error', ToastAndroid.SHORT);
+      setLoading(false);
+      setNotFound('Pokemon no encontrado');
     }
 
     // setTimeout(async () => {
@@ -39,10 +41,7 @@ export default function App() {
 
   const getTypesMatchUps = async (types: TypeInfo[]) => {
     const urls = types.map(({ type: { url } }) => url);
-
     const response: any = await Promise.all(urls.map(async (url) => await axios.get(url)));
-    console.log('-----------------------------------------');
-    console.log(response);
   };
 
   return (
@@ -70,7 +69,7 @@ export default function App() {
         ) : loading ? (
           <ActivityIndicator size="large" style={{ marginTop: 30 }} />
         ) : (
-          ''
+          <Text>{pokeNotFound}</Text>
         )}
       </ScrollView>
     </View>
@@ -82,8 +81,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    padding: 30,
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0
+    margin: '5%',
+    paddingTop: '5%'
   },
   input: {
     width: '100%',
