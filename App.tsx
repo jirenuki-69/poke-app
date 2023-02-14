@@ -9,7 +9,7 @@ import axios from 'axios';
 
 export default function App() {
   const [value, setValue] = useState('');
-  const [pokemon, setPokemon] = useState<Pokemon | null>();
+  const [pokemon, setPokemon] = useState<Pokemon | any | null>();
   const [loading, setLoading] = useState(false);
   const [pokeNotFound, setNotFound] = useState('');
 
@@ -19,13 +19,11 @@ export default function App() {
 
     try {
       const { data }: { data: Pokemon } = await requestAPI.get(`pokemon/${value}`);
-
-      const { description } = await getPokemonInfo(data.id);
-
-      getTypesMatchUps(data.types);
+      const pokemonInfo = await getPokemonInfo(data.id);
 
       setLoading(false);
-      setPokemon({ ...data, description });
+      setPokemon(pokemonInfo);
+      console.log(JSON.stringify(pokemonInfo, null, 2))
     } catch (error) {
       setLoading(false);
       setNotFound('Pokemon no encontrado');
@@ -39,18 +37,13 @@ export default function App() {
     // }, 2000);
   };
 
-  const getTypesMatchUps = async (types: PKType[]) => {
-    const urls = types.map(({ type: { url } }) => url);
-    const response: any = await Promise.all(urls.map(async (url) => await axios.get(url)));
-  };
-
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <ExpoStatusBar style="auto" />
         <TextInput
           autoCapitalize="none"
-          label="Pokemon Name"
+          label="Nombre del Pokemon"
           variant="standard"
           style={styles.input}
           value={value}
@@ -59,12 +52,36 @@ export default function App() {
         />
         {pokemon ? (
           <View>
-            <PokemonImage uri={pokemon.sprites.front_default} name={pokemon.name} />
+            <PokemonImage uri={pokemon.image} name={pokemon.name} />
             <PokemonTitleSubtitle
-              title="Types"
-              subtitle={pokemon.types.map(({ type: { name } }) => name).join(', ')}
+              title="Tipo"
+              subtitle={pokemon.typeInfo.names}
             />
-            <PokemonTitleSubtitle title="Description" subtitle={pokemon.description} />
+            <PokemonTitleSubtitle title="Descripcion" subtitle={pokemon.description} />
+            <PokemonTitleSubtitle
+              title="Tipos a los que NO le hace daño"
+              subtitle={pokemon.typeInfo.no_damage_to || 'No aplica'}
+            />
+            <PokemonTitleSubtitle
+              title="Tipos a los que hace la mitad de daño"
+              subtitle={pokemon.typeInfo.half_damage_to || 'No aplica'}
+            />
+            <PokemonTitleSubtitle
+              title="Tipos a los que les hace el doble de daño,"
+              subtitle={pokemon.typeInfo.double_damage_to || 'No aplica'}
+            />
+            <PokemonTitleSubtitle
+              title="Tipos a los que recibe el doble de daño"
+              subtitle={pokemon.typeInfo.double_damage_from || 'No aplica'}
+            />
+            <PokemonTitleSubtitle
+              title="Ataques"
+              subtitle={pokemon.movesInfo.join(` / `)}
+            />
+            <PokemonTitleSubtitle
+              title="Cadena evolutivas"
+              subtitle={pokemon.evolutionTree.map((value : any) => `${value.name}(${value.types})`).join(' --> ')}
+            />
           </View>
         ) : loading ? (
           <ActivityIndicator size="large" style={{ marginTop: 30 }} />
