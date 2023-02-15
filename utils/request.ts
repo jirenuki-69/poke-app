@@ -58,20 +58,20 @@ const processSpecies = async (ogSpecies : PKTypeInternal) => {
 
   if (url) {
     const { data: { chain: { species, evolves_to } } } = await requestAPI.get(cleanUrl(url));
-    const { data: { order, name } } = await requestAPI.get(cleanUrl(species.url));
-    const { data: { types } } = await requestAPI.get(`pokemon/${order}`);
+    const { data: { id, name } } = await requestAPI.get(cleanUrl(species.url));
+    const { data: { types } } = await requestAPI.get(`pokemon/${id}`);
 
     const evolutions = [{ name, types: types.map(({ type: { name } } : { type: { name : string } } ) => name).join(', ')}];
 
     const stage = await Promise.all(evolves_to.map(async (evolution: any) => {
-      const { data: { order, name } } = await requestAPI.get(cleanUrl(evolution.species.url));
-      const { data: { types } } = await requestAPI.get(`pokemon/${order}`);
+      const { data: { id, name } } = await requestAPI.get(cleanUrl(evolution.species.url));
+      const { data: { types } } = await requestAPI.get(`pokemon/${id}`);
       
       evolutions.push({ name, types: types.map(({ type: { name } } : { type: { name : string } } ) => name).join(', ')});
 
       if (!isEmpty(evolution.evolves_to)) {
-        const { data: { order, name } } = await requestAPI.get(cleanUrl(evolution.evolves_to[0].species.url));
-        const { data: { types } } = await requestAPI.get(`pokemon/${order}`);
+        const { data: { id, name } } = await requestAPI.get(cleanUrl(evolution.evolves_to[0].species.url));
+        const { data: { types } } = await requestAPI.get(`pokemon/${id}`);
         
         evolutions.push({ name, types: types.map(({ type: { name } } : { type: { name : string } } ) => name).join(', ')});
       }
@@ -119,4 +119,3 @@ const joinAttribute = (data: any, attribute: string) => {
     return element[attribute];
   }).join(', ');
 };
-
