@@ -93,7 +93,6 @@ export const getPokemonInfo = async (id: number) => {
 
     const description = await getPokemonDescription(species);
     const typeInfo = await getPokemonType(types);
-    console.log({ typeInfo })
     const movesInfo = processMoves(moves);
     const evolutionTree = await processSpecies(species);
 
