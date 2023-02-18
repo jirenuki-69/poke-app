@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash';
 import React, { useState } from 'react';
 import { StatusBar as ExpoStatusBar } from 'expo-status-bar';
 import { Platform, StyleSheet, View, StatusBar, ScrollView, ToastAndroid, Text } from 'react-native';
@@ -22,8 +23,13 @@ export default function App() {
       const { data }: { data: Pokemon } = await requestAPI.get(`pokemon/${value}`);
       const pokemonInfo = await getPokemonInfo(data.id);
 
-      setLoading(false);
-      setPokemon(pokemonInfo);
+      if (isEmpty(pokemonInfo)) {
+        setLoading(false);
+        setNotFound('Pokemon no encontrado');
+      } else {
+        setLoading(false);
+        setPokemon(pokemonInfo);
+      }
     } catch (error) {
       setLoading(false);
       setNotFound('Pokemon no encontrado');
