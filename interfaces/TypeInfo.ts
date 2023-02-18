@@ -1,5 +1,5 @@
 interface TypeInfo {
-  names: string,
+  name: string,
   double_damage_from : string, 
   double_damage_to : string, 
   half_damage_from : string, 

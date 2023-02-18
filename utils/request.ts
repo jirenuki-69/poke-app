@@ -29,24 +29,26 @@ const getPokemonType = async (types : PKType[]) => {
     
     return {
       name,
-      double_damage_from, 
-      double_damage_to, 
-      half_damage_from, 
-      half_damage_to,
-      no_damage_from,
-      no_damage_to
+      double_damage_from: joinAttribute(double_damage_from, 'name'), 
+      double_damage_to: joinAttribute(double_damage_to, 'name'), 
+      half_damage_from: joinAttribute(half_damage_from, 'name'), 
+      half_damage_to: joinAttribute(half_damage_to, 'name'),
+      no_damage_from: joinAttribute(no_damage_from, 'name'),
+      no_damage_to: joinAttribute(no_damage_to, 'name')
     };
   }));
 
-  return typesInfo.reduce((acc: any, type) => {
-    acc.names = acc.names ? acc.names +  `, ${type.name}` : type.name;
-    acc.no_damage_to = acc.no_damage_to ? acc.no_damage_to +  `, ${joinAttribute(type.no_damage_to, 'name')}` : joinAttribute(type.no_damage_to, 'name');
-    acc.half_damage_to = acc.half_damage_to ? acc.half_damage_to +  `, ${joinAttribute(type.half_damage_to, 'name')}` : joinAttribute(type.half_damage_to, 'name');
-    acc.double_damage_to = acc.double_damage_to ? acc.double_damage_to +  `, ${joinAttribute(type.double_damage_to, 'name')}` : joinAttribute(type.double_damage_to, 'name');
-    acc.double_damage_from = acc.double_damage_from ? acc.double_damage_from +  `, ${joinAttribute(type.double_damage_from, 'name')}` : joinAttribute(type.double_damage_from, 'name');
+  return typesInfo;
+
+  // return typesInfo.reduce((acc: any, type) => {
+  //   acc.names = acc.names ? acc.names +  `, ${type.name}` : type.name;
+  //   acc.no_damage_to = acc.no_damage_to ? acc.no_damage_to +  `, ${joinAttribute(type.no_damage_to, 'name')}` : joinAttribute(type.no_damage_to, 'name');
+  //   acc.half_damage_to = acc.half_damage_to ? acc.half_damage_to +  `, ${joinAttribute(type.half_damage_to, 'name')}` : joinAttribute(type.half_damage_to, 'name');
+  //   acc.double_damage_to = acc.double_damage_to ? acc.double_damage_to +  `, ${joinAttribute(type.double_damage_to, 'name')}` : joinAttribute(type.double_damage_to, 'name');
+  //   acc.double_damage_from = acc.double_damage_from ? acc.double_damage_from +  `, ${joinAttribute(type.double_damage_from, 'name')}` : joinAttribute(type.double_damage_from, 'name');
     
-    return acc;
-  }, {})
+  //   return acc;
+  // }, {})
 };
 
 const processMoves = (moves: any) => {
@@ -91,6 +93,7 @@ export const getPokemonInfo = async (id: number) => {
 
     const description = await getPokemonDescription(species);
     const typeInfo = await getPokemonType(types);
+    console.log({ typeInfo })
     const movesInfo = processMoves(moves);
     const evolutionTree = await processSpecies(species);
 

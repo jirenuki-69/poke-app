@@ -6,6 +6,7 @@ import { getPokemonInfo, requestAPI } from './utils/request';
 import PokemonImage from './components/PokemonImage';
 import PokemonTitleSubtitle from './components/PokemonTitleSubtitle';
 import axios from 'axios';
+import { string } from 'prop-types';
 
 export default function App() {
   const [value, setValue] = useState('');
@@ -53,26 +54,32 @@ export default function App() {
           <View>
             <PokemonImage uri={pokemon.image} name={pokemon.name} />
             <PokemonTitleSubtitle
-              title="Tipo"
-              subtitle={pokemon.typeInfo.names}
+              title="Tipos"
+              subtitle={pokemon.typeInfo.map(({ name } : { name: String }) => name).join(', ')}
             />
-            <PokemonTitleSubtitle title="Descripcion" subtitle={pokemon.description} />
-            <PokemonTitleSubtitle
-              title="Tipos a los que NO le hace daño"
-              subtitle={pokemon.typeInfo.no_damage_to || 'No aplica'}
-            />
-            <PokemonTitleSubtitle
-              title="Tipos a los que hace la mitad de daño"
-              subtitle={pokemon.typeInfo.half_damage_to || 'No aplica'}
-            />
-            <PokemonTitleSubtitle
-              title="Tipos a los que les hace el doble de daño,"
-              subtitle={pokemon.typeInfo.double_damage_to || 'No aplica'}
-            />
-            <PokemonTitleSubtitle
-              title="Tipos a los que recibe el doble de daño"
-              subtitle={pokemon.typeInfo.double_damage_from || 'No aplica'}
-            />
+            <PokemonTitleSubtitle title="Descripcion" subtitle={pokemon.description} flag/>
+            {pokemon.typeInfo.map((type : TypeInfo, ix : React.Key) => {
+              return <>
+                <View>
+                  <PokemonTitleSubtitle
+                    title="Tipo"
+                    subtitle={type.name} />
+                  <PokemonTitleSubtitle
+                    title="Tipos a los que NO le hace daño"
+                    subtitle={type.no_damage_to || 'No aplica'} />
+                    <PokemonTitleSubtitle
+                    title="Tipos a los que hace la mitad de daño"
+                    subtitle={type.half_damage_to || 'No aplica'} />
+                    <PokemonTitleSubtitle
+                    title="Tipos a los que les hace el doble de daño,"
+                    subtitle={type.double_damage_to || 'No aplica'} />
+                    <PokemonTitleSubtitle
+                    title="Tipos a los que recibe el doble de daño"
+                    subtitle={type.double_damage_from || 'No aplica'}
+                    flag />
+                </View>
+              </>
+            })}
             <PokemonTitleSubtitle
               title="Ataques"
               subtitle={pokemon.movesInfo.join(` / `)}

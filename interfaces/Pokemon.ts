@@ -3,7 +3,7 @@ interface Pokemon {
   name: string,
   movesInfo: string[],
   image: string,
-  typeInfo: TypeInfo,
+  typeInfo: TypeInfo[],
   description: string
   evolutionTree?: EvolutionTree[]
 }
