@@ -56,6 +56,7 @@ const styles = StyleSheet.create(({
     borderRadius: 10,
     width: '60%',
     alignSelf: 'center',
+    alignContent: 'center'
   }
 }));
 

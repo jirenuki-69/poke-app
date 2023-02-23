@@ -14,8 +14,7 @@ import Animated, {
   runOnJS,
   useAnimatedStyle,
   useSharedValue,
-  withTiming,
-  withRepeat
+  withTiming
 } from 'react-native-reanimated';
 import { TextInput, ActivityIndicator } from '@react-native-material/core';
 import { getPokemonInfo, requestAPI } from './utils/request';
